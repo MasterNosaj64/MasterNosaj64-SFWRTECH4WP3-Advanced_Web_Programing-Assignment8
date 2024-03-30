@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hamilton Homes</title>
+    <link href="./chatbot.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Hamilton Homes</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav">
+                <a class="nav-link active" href="#">Home</a>
+                <a class="nav-link" href="Search#">Search</a>
+                <a class="nav-link" href="#map">Map</a>
+                <a class="nav-link" href="#calculator">Calculator</a>
+                <a class="nav-link" href="#realtors">Realtors</a>
+                <a class="nav-link" href="#login">Login</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<H1>Home Page</H1>
+<button class="open-button btn" onclick="openForm()">Chat</button>
+
+<div class="chat-popup" id="myForm">
+    <form action="" class="form-container">
+
+        <ul id="messages">
+            <li>Hi there, how can I help you today?</li>
+        </ul>
+
+        <br/>
+        <textarea placeholder="Type message.." id="msg" name="msg" required></textarea>
+
+        <button type="button" id="send" class="button btn">Send</button>
+        <button type="button" class="button cancel btn" onclick="closeForm()">Close</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+    const data =
+        [
+            {
+                address: "224 EAST 25TH ST",
+                postal_code: "L8V 3A5",
+                city: "Hamilton",
+                community: "Mountain",
+                province: "Ontario",
+                price: 779900,
+                bedrooms: 4,
+                bathrooms: 3,
+                img: "224east.jpeg",
+                description: "Beautiful 100% Turn-Key 1.5 Storey Home On East Mountain Feat 3+1 Beds, 3 Baths, In-Law Suite W/ Duplex Conversion Potential, Ample Storage Space, Detached Garage, Up To 5 Car Parking, & Waterproofed Bsmt."
+            },
+
+            {
+                address: "183 Kitty Murray Lane",
+                postal_code: "L9K 1H7",
+                city: "Hamilton",
+                community: "Ancaster",
+                province: "Ontario",
+                price: 1050000,
+                bedrooms: 4,
+                bathrooms: 4,
+                img: "183kitty.jpeg",
+                description: "Steps to Meadowlands,schools, parks and easy access to 403/LINC. 2 Storey, 3+1 bedrm,3.5 baths with large backyard. Hardwood stairs and hardwood floors in all principal and bed rooms, no carpet! "
+            },
+
+            {
+                address: "20 ERINGATE Court",
+                postal_code: "L8J 3Y4",
+                city: "Hamilton",
+                community: "Stoney Creek",
+                province: "Ontario",
+                price: 1925000,
+                bedrooms: 4,
+                bathrooms: 4,
+                img: "20eringate.jpeg",
+                description: "Built by award winning Zeina Homes. All brick on the sides and rear. Modern open concept main floor has 9ft ceiling, oak staircase with iron spindles, hardwood floors on main level and upper hallways, oversized windows, large kitchen with custom extended height cabinets, granite counters, large island, stainless steel appliances and porcelain tiles."
+            },
+
+            {
+                address: "11 Cloverhill Avenue",
+                postal_code: "L8J 3Y4",
+                city: "Hamilton",
+                community: "Dundas",
+                province: "Ontario",
+                price: 899900,
+                bedrooms: 3,
+                bathrooms: 3,
+                img: "11cloverhill.jpeg",
+                description: "Fabulous home and property in sought after Dundas neighborhood. Superb location on a quiet cul de sac just a short walk to downtown Dundas's shops, restaurants and amenities."
+            },
+
+            {
+                address: "257 PARKSIDE Drive Unit# 8",
+                postal_code: "L8B 0W5",
+                city: "Hamilton",
+                community: "Waterdown",
+                province: "Ontario",
+                price: 799900,
+                bedrooms: 2,
+                bathrooms: 3,
+                img: "257parkside.jpeg",
+                description: "This condo townhome boasts two huge bedrooms, both with 4-piece ensuite bathrooms. The laundry is also on the bedroom level with custom California Closet built-ins around it. The main floor is stunning! Open concept living/dining room and kitchen with a breakfast bar."
+            },
+
+        ];
+
+    function openForm() {
+        document.getElementById("myForm").style.display = "block";
+    }
+
+    function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+    }
+    function parseMessage(message) {
+
+        let replyMessage = "";
+        //check for commands
+        message = message.split(" ");
+
+        if (message[0] === "help") {
+
+            replyMessage = "I understand the following commands (these are case sensitive and where # is an integer):\n" +
+                "- help (this command)\n" +
+                "- bedrooms #num\n" +
+                "- bathrooms #num\n" +
+                "- price #min #max\n" +
+                "- Ancaster\n" +
+                "- Dundas\n" +
+                "- Mountain\n" +
+                "- Stoney Creek\n" +
+                "- Waterdown\n";
+
+        } else if (message[0] === "bedrooms" || message[0] === "bathrooms") {
+
+            if (message.length === 2 && Number.parseInt(message[1]) >= 1) {
+
+                if (message[0] === "bedrooms") {
+                    replyMessage = JSON.stringify(data.filter((house) => (house.bedrooms >= Number.parseInt(message[1]))));
+                }
+
+                if (message[0] === "bathrooms") {
+                    replyMessage = JSON.stringify(data.filter((house) => (house.bathrooms >= Number.parseInt(message[1]))));
+                }
+
+            } else {
+
+                replyMessage = unrecognizedReply();
+
+            }
+
+        } else if (message[0] === "price") {
+
+            if (message.length === 3 && Number.parseInt(message[1]) >= 0 && Number.parseInt(message[2]) >= 0) {
+
+                if (Number.parseInt(message[1]) < Number.parseInt(message[2])) {
+
+                    //get properties by min and max price
+                    let min = Number.parseInt(message[1]);
+                    let max = Number.parseInt(message[2]);
+
+                    replyMessage = JSON.stringify(data.filter((house) => (house.price <= max &&
+                        house.price >= min)));
+
+                } else {
+                    replyMessage = unrecognizedReply();
+                }
+
+            } else {
+                replyMessage = unrecognizedReply();
+            }
+
+
+        } else if (message[0] === "Ancaster" || message[0] === "Dundas" || message[0] === "Mountain" || message[0] === "Waterdown") {
+
+            replyMessage = JSON.stringify(data.filter((house) => house.community === message[0]));
+
+        } else if (message[0] === "Stoney" && message[1] === "Creek") {
+
+            replyMessage = JSON.stringify(data.filter((house) => house.community === (message[0]) + " " + message[1]));
+
+        } else {
+
+            replyMessage = unrecognizedReply();
+
+        }
+
+
+        return replyMessage;
+
+    }
+
+    function unrecognizedReply() {
+
+        return "I'm sorry, I do not recognize that command. Enter 'help' for a list of commands.";
+    }
+
+    document.getElementById("send").onclick = function () {
+
+        var message = $("#msg").val();
+
+        $("#messages").append("<li>" + message + "</li>");
+        let reply = parseMessage(message);
+        //log message in redis db
+        // Make an AJAX POST request to log the message
+        $.ajax({
+            type: "POST",
+            url: "/log",
+            contentType: "application/json",
+            data: JSON.stringify({ message: message }),
+            success: function(response) {
+                console.log("Message logged");
+            },
+            error: function(xhr, status, error) {
+                console.error("Error logging message");
+            }
+        });
+
+        $("#msg").val("");
+        $("#messages").append("<li>" + reply + "</li>");
+
+        let messages = document.getElementById("messages");
+        messages.scrollTop = messages.scrollHeight;
+    }
+</script>
+</body>
+<footer style="background-color: grey">
+    Jason Waid | McMaster University
+</footer>
+
+</html>
